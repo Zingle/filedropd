@@ -2,11 +2,17 @@
 
 import express from "express";
 import tlsopt from "tlsopt";
+import {configure, fail} from "filedropd";
 
-const app = express();
-const server = tlsopt.createServerSync(app);
+try {
+  const app = express();
+  const server = tlsopt.createServerSync(app);
+  const {port} = configure(process.env);
 
-server.listen(() => logServerInfo(server));
+  server.listen(port, () => logServerInfo(server));
+} catch (err) {
+  fail(err);
+}
 
 function logServerInfo(server) {
   const {address, family, port} = server.address();
