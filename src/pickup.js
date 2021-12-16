@@ -4,7 +4,7 @@ import {http, pipeline} from "filedropd";
 import {METADATA_PREFIX} from "filedropd";
 
 export default function pickup(dir) {
-  return async function pickup(req, res, next) {
+  return async function pickup(req, res) {
     const {id} = req.params;
     const path = join(dir, id);
     const dataPath = `${path}.metadata`;

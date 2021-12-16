@@ -3,7 +3,7 @@ import {join} from "path";
 import {http} from "filedropd";
 
 export default function clean(dir) {
-  return async function clean(req, res, next) {
+  return async function clean(req, res) {
     const {id} = req.params;
     const path = join(dir, id);
     const dataPath = `${path}.metadata`;
