@@ -2,6 +2,7 @@
 
 import express from "express";
 import basic from "express-basic-auth";
+import morgan from "morgan";
 import tlsopt from "tlsopt";
 import {clean, configure, drop, error, fail, http, pickup} from "filedropd";
 
@@ -11,6 +12,7 @@ try {
   const {port, dir, user, password} = configure(process.env);
 
   app.use(basic({users: {[user]: password}, unauthorizedResponse: "Unauthorized\n"}));
+  app.use(morgan("tiny"));
   app.post("/drop", drop(dir));
   app.get("/pickup/:id", pickup(dir));
   app.delete("/pickup/:id", clean(dir));
