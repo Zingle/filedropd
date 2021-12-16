@@ -8,3 +8,12 @@ export function http404() {
     res.end();
   }
 }
+
+export function http500() {
+  return function http500(req, res) {
+    res.status(500);
+    res.type(TYPE_TEXT);
+    res.send("Internal Server Error\n");
+    res.end();
+  }
+}

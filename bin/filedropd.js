@@ -2,7 +2,7 @@
 
 import express from "express";
 import tlsopt from "tlsopt";
-import {configure, fail, http} from "filedropd";
+import {configure, error, fail, http} from "filedropd";
 
 try {
   const app = express();
@@ -10,6 +10,7 @@ try {
   const {port, dir, secret} = configure(process.env);
 
   app.all("*", http.http404());
+  app.use(error());
 
   server.listen(port, () => {
     console.info(listenInfo(server));
