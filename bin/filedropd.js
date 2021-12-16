@@ -7,15 +7,18 @@ import {configure, fail} from "filedropd";
 try {
   const app = express();
   const server = tlsopt.createServerSync(app);
-  const {port} = configure(process.env);
+  const {port, dir} = configure(process.env);
 
-  server.listen(port, () => logServerInfo(server));
+  server.listen(port, () => {
+    console.info(listenInfo(server));
+    console.info("serving files from", dir);
+  });
 } catch (err) {
   fail(err);
 }
 
-function logServerInfo(server) {
+function listenInfo(server) {
   const {address, family, port} = server.address();
   const host = family === "IPv6" ? `[${address}]` : address;
-  console.info(`listening on ${host}:${port}`);
+  return `listening on ${host}:${port}`;
 }
