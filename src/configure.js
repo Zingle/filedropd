@@ -7,10 +7,12 @@ export default function configure(env) {
 
   if (env.FILEDROP_PORT) config.port = readint(env.FILEDROP_PORT);
   if (env.FILEDROP_DIR) config.dir = resolve(env.FILEDROP_DIR);
-  if (env.FILEDROP_SECRET) config.secret = env.FILEDROP_SECRET;
+  if (env.FILEDROP_USER) config.user = env.FILEDROP_USER;
+  if (env.FILEDROP_PASS) config.password = env.FILEDROP_PASS;
 
   if (isNaN(config.port) || config.port < 1) throw new Error("invalid port");
-  if (!env.FILEDROP_SECRET) throw new Error("secret not configured");
+  if (!config.user) throw new Error("user not configured");
+  if (!config.password) throw new Error("password not configured");
 
   return config;
 }

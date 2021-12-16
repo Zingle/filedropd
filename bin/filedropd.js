@@ -1,14 +1,16 @@
 #!/usr/bin/env node
 
 import express from "express";
+import basic from "express-basic-auth";
 import tlsopt from "tlsopt";
 import {configure, error, fail, http} from "filedropd";
 
 try {
   const app = express();
   const server = tlsopt.createServerSync(app);
-  const {port, dir, secret} = configure(process.env);
+  const {port, dir, user, password} = configure(process.env);
 
+  app.use(basic({users: {[user]: password}, unauthorizedResponse: "Unauthorized\n"}));
   app.all("*", http.http404());
   app.use(error());
 
