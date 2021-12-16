@@ -2,12 +2,14 @@
 
 import express from "express";
 import tlsopt from "tlsopt";
-import {configure, fail} from "filedropd";
+import {configure, fail, http} from "filedropd";
 
 try {
   const app = express();
   const server = tlsopt.createServerSync(app);
   const {port, dir, secret} = configure(process.env);
+
+  app.all("*", http.http404());
 
   server.listen(port, () => {
     console.info(listenInfo(server));
