@@ -1,11 +1,10 @@
 import {createWriteStream, promises as fs} from "fs";
 import {join} from "path";
-import {genid, fullURL, http, limit} from "filedropd";
+import {genid, fullURL, http, limit, pipeline} from "filedropd";
+import {METADATA_PREFIX} from "filedropd";
 
-const METADATA_PREFIX = "x-filedrop-metadata-";
-
-export default function dropfile(dir) {
-  return async function dropfile(req, res) {
+export default function drop(dir) {
+  return async function drop(req, res) {
     const metadata = readMetadata(req);
 
     if (metadata === false) {
@@ -14,7 +13,7 @@ export default function dropfile(dir) {
 
     const id = genid();
     const path = join(dir, id);
-    const file = createWriteStream(path);
+    const file = createWriteStream(path, {flags: "wx"});
     const limiter = limit("50MiB");
     const dataPath = `${path}.metadata`;
 
@@ -42,21 +41,15 @@ export default function dropfile(dir) {
   }
 }
 
-async function pipeline(...streams) {
-  return new Promise((resolve, reject) => {
-    streams[streams.length-1].on("finish", resolve);
-    streams.forEach(stream => stream.on("error", reject));
-    streams.reduce((a, b) => a?a.pipe(b):b);
-  });
-}
-
 function readMetadata(req) {
   const metadata = {};
 
-  for (const [name, value] of Object.entries(req.headers)) {
-    if (name.toLowerCase().startsWith(METADATA_PREFIX)) {
-      if (name in metadata) throw new Error("duplicate metadata");
-      metadata[name] = value;
+  for (const [key, value] of Object.entries(req.headers)) {
+    const header = key.toLowerCase();
+
+    if (header.startsWith(METADATA_PREFIX)) {
+      if (header in metadata) throw new Error("duplicate metadata");
+      metadata[header] = value;
     }
   }
 
