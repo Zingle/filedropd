@@ -8,6 +8,7 @@
   "author": "Richard Remer <reanjr@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "bytesized": "^2.0.0",
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.1",
     "tlsopt": "^3.1.0"

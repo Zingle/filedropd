@@ -3,7 +3,7 @@
 import express from "express";
 import basic from "express-basic-auth";
 import tlsopt from "tlsopt";
-import {configure, error, fail, http} from "filedropd";
+import {configure, dropfile, error, fail, http} from "filedropd";
 
 try {
   const app = express();
@@ -11,6 +11,8 @@ try {
   const {port, dir, user, password} = configure(process.env);
 
   app.use(basic({users: {[user]: password}, unauthorizedResponse: "Unauthorized\n"}));
+  app.post("/drop", dropfile(dir));
+  app.all("/drop", http.http405("POST"));
   app.all("*", http.http404());
   app.use(error());
 
