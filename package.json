@@ -6,5 +6,9 @@
   "bin": "bin/filedropd.js",
   "exports": "./index.js",
   "author": "Richard Remer <reanjr@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.17.1",
+    "tlsopt": "^3.1.0"
+  }
 }
