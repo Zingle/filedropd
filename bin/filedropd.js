@@ -7,7 +7,7 @@ import {configure, fail} from "filedropd";
 try {
   const app = express();
   const server = tlsopt.createServerSync(app);
-  const {port, dir} = configure(process.env);
+  const {port, dir, secret} = configure(process.env);
 
   server.listen(port, () => {
     console.info(listenInfo(server));
