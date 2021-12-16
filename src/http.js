@@ -1,9 +1,22 @@
 const TYPE_TEXT = "text/plain; charset=utf-8";
 
+export function clientError404(res) {
+  const clientError = http404();
+  const req = {};
+  clientError(req, res);
+}
+
 export function clientError413(res) {
   const clientError = http413();
   const req = {};
   clientError(req, res);
+}
+
+export function http204() {
+  return function http204(req, res) {
+    res.status(204);
+    res.end();
+  }
 }
 
 export function http303(location) {
@@ -66,4 +79,10 @@ export function redirect303(res, location) {
   const redirect = http303(location);
   const req = {};
   redirect(req, res);
+}
+
+export function success204(res) {
+  const success = http204();
+  const req = {};
+  success(req, res);
 }

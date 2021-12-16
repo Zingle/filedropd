@@ -1,3 +1,4 @@
+export {default as clean} from "./src/clean.js";
 export {default as configure} from "./src/configure.js";
 export {default as drop} from "./src/drop.js";
 export {default as error} from "./src/error.js";

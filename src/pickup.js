@@ -1,6 +1,6 @@
 import {createReadStream, promises as fs} from "fs";
 import {join} from "path";
-import {pipeline} from "filedropd";
+import {http, pipeline} from "filedropd";
 import {METADATA_PREFIX} from "filedropd";
 
 export default function pickup(dir) {
@@ -15,8 +15,8 @@ export default function pickup(dir) {
       sendMetadata(res, await fs.readFile(dataPath, {encoding}));
       await pipeline(createReadStream(path), res);
     } catch (err) {
-      if (err.code === "ENOENT") next();
-      throw err;
+      if (err.code !== "ENOENT") throw err;
+      http.clientError404(res);
     }
   }
 }
